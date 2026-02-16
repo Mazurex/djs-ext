@@ -20,12 +20,24 @@
         "dev": "tsup --watch",
         "test": "vitest",
         "test:watch": "vitest --watch",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "pnpm run build"
     },
-    "keywords": [],
-    "author": "",
+    "keywords": [
+        "discord",
+        "extension",
+        "toolkit",
+        "node"
+    ],
+    "author": "Maz",
     "license": "ISC",
     "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Mazurex/djs-ext.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Mazurex/djs-ext.git/issues"
+    },
     "peerDependencies": {
         "discord.js": "^14.25.1"
     },
@@ -35,5 +47,6 @@
         "tsup": "^8.5.1",
         "typescript": "^5.9.3",
         "vitest": "^4.0.18"
-    }
+    },
+    "packageManager": "pnpm@10.0.0"
 }

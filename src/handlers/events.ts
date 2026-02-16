@@ -30,7 +30,10 @@ export async function registerAll(
         const filePath = path.join(eventsPath, file)
         const fileData = fs.statSync(filePath)
 
-        if (fileData.isDirectory()) return registerAll(client, file, eventsPath)
+        if (fileData.isDirectory()) {
+            registerAll(client, file, eventsPath)
+            continue
+        }
         const { event } = (await import(pathToFileURL(filePath).href)) as {
             event: BotEventListener<any>
         }

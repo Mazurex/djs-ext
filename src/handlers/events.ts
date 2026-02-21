@@ -1,11 +1,12 @@
-import { Client, ClientEvents } from 'discord.js'
+import { ClientEvents } from 'discord.js'
 import { BotEventListener } from '../types/BotEventListener'
 import path from 'path'
 import fs from 'fs'
 import { pathToFileURL } from 'url'
+import { ExtendedClient } from '../ExtendedClient'
 
 export function registerEventListener<T extends keyof ClientEvents>(
-    client: Client,
+    client: ExtendedClient,
     listener: BotEventListener<T>
 ) {
     const registerFunc = (listener.once ? client.once : client.on).bind(client)
@@ -13,7 +14,7 @@ export function registerEventListener<T extends keyof ClientEvents>(
 }
 
 export async function registerEventFromPath(
-    client: Client,
+    client: ExtendedClient,
     relativePath: string,
     absolutePath: string = process.cwd()
 ) {

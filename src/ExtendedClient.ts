@@ -2,12 +2,10 @@ import {
     Client,
     ClientOptions,
     Collection,
-    DiscordjsError,
     GatewayIntentBits,
 } from 'discord.js'
-import { PrefixCommand } from './types/PrefixCommand'
-import { SlashCommand } from './types/SlashCommand'
 import { DjsExtError, DjsExtErrorCodes } from './Error'
+import { PrefixCommand, SlashCommand } from './types/Command'
 
 const DefaultClientOptions: ClientOptions = {
     intents: [

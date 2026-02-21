@@ -3,8 +3,10 @@ export enum DjsExtErrorCodes {
 }
 
 export class DjsExtError extends Error {
-    public constructor(code: DjsExtErrorCodes, args?: unknown[]) {
-        const format = `"${code}"${args ? `:\n [${`${args.join(', ')}`}]` : ''}`
+    public constructor(code: DjsExtErrorCodes, args: unknown[] = []) {
+        let format = `"${code}"`
+        if (args.length) format += `:\n [${args.join(', ')}]`
+
         super(format)
     }
 }

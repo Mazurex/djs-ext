@@ -1,7 +1,7 @@
 import { Client, GatewayIntentBits, Message, TextChannel } from 'discord.js'
 import 'dotenv/config'
 
-import { registerAll } from '../../../dist/index.js'
+import { registerEventFromPath } from '../../../dist/index.js'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
 
@@ -18,6 +18,6 @@ const client = new Client({
 
 console.debug('Starting bot brrrrrrrrrrrrrrrrrrrrr')
 
-registerAll(client, './events', __dirname)
+registerEventFromPath(client, './events', __dirname)
 
 client.login(process.env.BOT_TOKEN)

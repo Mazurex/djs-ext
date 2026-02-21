@@ -7,5 +7,5 @@ export interface BotEventListener<T extends keyof ClientEvents> {
 }
 
 export const defineEvent = <T extends keyof ClientEvents>(
-    e: BotEventListener<T>
-) => e
+    listener: BotEventListener<T>
+) => listener

@@ -12,7 +12,7 @@ export function registerEventListener<T extends keyof ClientEvents>(
     registerFunc(listener.type, (...args) => listener.execute(client, ...args))
 }
 
-export async function registerAll(
+export async function registerEventFromPath(
     client: Client,
     relativePath: string,
     absolutePath: string = process.cwd()
@@ -31,7 +31,7 @@ export async function registerAll(
         const fileData = fs.statSync(filePath)
 
         if (fileData.isDirectory()) {
-            registerAll(client, file, eventsPath)
+            registerEventFromPath(client, file, eventsPath)
             continue
         }
         const { event } = (await import(pathToFileURL(filePath).href)) as {

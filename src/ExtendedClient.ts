@@ -5,7 +5,7 @@ import {
     GatewayIntentBits,
 } from 'discord.js'
 import { DjsExtError, DjsExtErrorCodes } from './Error'
-import { PrefixCommand, SlashCommand } from './types/Command'
+import { PrefixCommand, SlashCommand } from './types/commands/Commands'
 
 const DefaultClientOptions: ClientOptions = {
     intents: [

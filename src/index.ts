@@ -4,7 +4,8 @@ export * from './handlers/events'
 // Types
 export * from './types/BotEventListener'
 export * from './types/Client'
-export * from './types/Command'
+export * from './types/commands/Commands'
+export * from './types/commands/PrefixCommandArgs'
 
 // Essential
 export * from './Error'

@@ -15,3 +15,12 @@ export class DjsExtError extends Error {
         super(format)
     }
 }
+
+/**
+ * Internal error on deserialization of a prefix command argument
+ */
+export class DjsExtDeserializationError extends Error {
+    public constructor(message: string) {
+        super(message)
+    }
+}

@@ -20,7 +20,15 @@ export class DjsExtError extends Error {
  * Internal error on deserialization of a prefix command argument
  */
 export class DjsExtDeserializationError extends Error {
-    public constructor(message: string) {
-        super(message)
+    public deserializer: string | null = null
+    public expected: any = null
+    public actual: any = null
+
+    public constructor(deserializer: string, expected: any, actual?: any) {
+        const format = `Issue during "${deserializer}" deserialization. Expected: "${expected}", Actual: "${actual}"`
+        super(format)
+        this.deserializer = deserializer
+        this.expected = expected
+        this.actual = actual
     }
 }

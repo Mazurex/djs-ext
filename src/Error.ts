@@ -8,11 +8,17 @@ export enum DjsExtErrorCodes {
  * @param args Optional array of info
  */
 export class DjsExtError extends Error {
+    public code: DjsExtErrorCodes
+    public args: unknown[]
+
     public constructor(code: DjsExtErrorCodes, args: unknown[] = []) {
         let format = `"${code}"`
         if (args.length) format += `:\n [${args.join(', ')}]`
 
         super(format)
+
+        this.code = code
+        this.args = args
     }
 }
 
@@ -20,9 +26,9 @@ export class DjsExtError extends Error {
  * Internal error on deserialization of a prefix command argument
  */
 export class DjsExtDeserializationError extends Error {
-    public deserializer: string | null = null
-    public expected: any = null
-    public actual: any = null
+    public deserializer: string
+    public expected: any
+    public actual: any
 
     public constructor(deserializer: string, expected: any, actual?: any) {
         const format = `Issue during "${deserializer}" deserialization. Expected: "${expected}", Actual: "${actual}"`

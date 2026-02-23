@@ -59,10 +59,10 @@ export interface PrefixCommand {
 }
 
 export function createPrefixCommand<
-    T extends readonly GenericArg<any, string>[] = [],
+    T extends readonly GenericArg<any, string>[],
 >(
     command: Omit<PrefixCommand, 'args' | 'execute'> & {
-        args?: T
+        args: T
         execute: (
             client: ExtendedClient,
             args: PrefixArgsRecord<T>,

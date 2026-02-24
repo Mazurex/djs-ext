@@ -1,5 +1,7 @@
 export enum DjsExtErrorCodes {
     NoTokenProvided = 'No Token Provided',
+    UnknownSlashCommand = 'Unknown slash command',
+    SlashCommandError = 'Slash command error',
 }
 
 /**
@@ -10,8 +12,13 @@ export enum DjsExtErrorCodes {
 export class DjsExtError extends Error {
     public code: DjsExtErrorCodes
     public args: unknown[]
+    public parent: Error | undefined
 
-    public constructor(code: DjsExtErrorCodes, args: unknown[] = []) {
+    public constructor(
+        code: DjsExtErrorCodes,
+        args: unknown[] = [],
+        parent?: Error
+    ) {
         let format = `"${code}"`
         if (args.length) format += `:\n [${args.join(', ')}]`
 
@@ -19,6 +26,7 @@ export class DjsExtError extends Error {
 
         this.code = code
         this.args = args
+        this.parent = parent
     }
 }
 

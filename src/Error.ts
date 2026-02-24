@@ -1,3 +1,8 @@
+const DjsExtErrorBrand = Symbol.for('djs-ext.error')
+const DjsExtDeserializationErrorBrand = Symbol.for(
+    'djs-ext-deserialization.error'
+)
+
 export enum DjsExtErrorCodes {
     NoTokenProvided = 'No Token Provided',
     UnknownSlashCommand = 'Unknown slash command',
@@ -10,6 +15,7 @@ export enum DjsExtErrorCodes {
  * @param args Optional array of info
  */
 export class DjsExtError extends Error {
+    public readonly [DjsExtErrorBrand] = true
     public code: DjsExtErrorCodes
     public args: unknown[]
     public parent: Error | undefined
@@ -34,6 +40,7 @@ export class DjsExtError extends Error {
  * Internal error on deserialization of a prefix command argument
  */
 export class DjsExtDeserializationError extends Error {
+    public readonly [DjsExtDeserializationErrorBrand] = true
     public deserializer: string
     public expected: any
     public actual: any
@@ -45,4 +52,20 @@ export class DjsExtDeserializationError extends Error {
         this.expected = expected
         this.actual = actual
     }
+}
+
+export function isDjsExtError(error: unknown): error is DjsExtError {
+    return (
+        typeof error === 'object' && error !== null && DjsExtErrorBrand in error
+    )
+}
+
+export function isDjsExtDeserializationError(
+    error: unknown
+): error is DjsExtDeserializationError {
+    return (
+        typeof error === 'object' &&
+        error !== null &&
+        DjsExtDeserializationErrorBrand in error
+    )
 }

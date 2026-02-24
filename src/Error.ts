@@ -18,12 +18,12 @@ export class DjsExtError extends Error {
     public readonly [DjsExtErrorBrand] = true
     public code: DjsExtErrorCodes
     public args: unknown[]
-    public parent: Error | undefined
+    public parent: unknown
 
     public constructor(
         code: DjsExtErrorCodes,
         args: unknown[] = [],
-        parent?: Error
+        parent?: unknown
     ) {
         let format = `"${code}"`
         if (args.length) format += `:\n [${args.join(', ')}]`

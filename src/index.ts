@@ -10,3 +10,5 @@ export * from './types/commands/PrefixCommandArgs'
 // Essential
 export * from './Error'
 export * from './ExtendedClient'
+
+export * from './classes/Event'

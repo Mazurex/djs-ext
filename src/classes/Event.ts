@@ -1,0 +1,32 @@
+import { Awaitable, ClientEvents } from 'discord.js'
+import { ExtendedClient } from '../ExtendedClient'
+
+export type Callback<E extends keyof ClientEvents> = (
+    client: ExtendedClient,
+    ...args: ClientEvents[E]
+) => Awaitable<void>
+
+export class EventListener<E extends keyof ClientEvents> {
+    private _name: E
+    private _once: boolean = false
+    private _callback: Callback<E> = () => {}
+
+    public constructor(name: E) {
+        this._name = name
+    }
+
+    public once(once: boolean = true) {
+        this._once = once
+        return this
+    }
+
+    public execute(callback: Callback<E>) {
+        this._callback = callback
+        return this
+    }
+
+    public register(client: ExtendedClient) {
+        const func = (this._once ? client.once : client.on).bind(client)
+        func(this._name, (...args) => this._callback(client, ...args))
+    }
+}

@@ -2,8 +2,8 @@ export enum DjsExtErrorCodes {
     NoTokenProvided = 'No Token Provided',
     UnknownSlashCommand = 'Unknown slash command',
     SlashCommandError = 'Slash command error',
-    MissingEventListener = 'Missing event listener',
-    MissingEventDir = 'Missing event directory',
+    MissingModuleDirectory = 'Missing module directory',
+    MissingModuleDefinition = 'Missing module definition',
 }
 
 /**

@@ -7,12 +7,12 @@ export type Callback<E extends keyof ClientEvents> = (
 ) => Awaitable<void>
 
 export class BotEventListener<E extends keyof ClientEvents> {
-    private _name: E
+    public readonly name: E
     private _once: boolean = false
     private _callback: Callback<E> = () => {}
 
     public constructor(name: E) {
-        this._name = name
+        this.name = name
     }
 
     public once(once: boolean = true) {
@@ -27,6 +27,6 @@ export class BotEventListener<E extends keyof ClientEvents> {
 
     public register(client: ExtendedClient) {
         const func = (this._once ? client.once : client.on).bind(client)
-        func(this._name, (...args) => this._callback(client, ...args))
+        func(this.name, (...args) => this._callback(client, ...args))
     }
 }

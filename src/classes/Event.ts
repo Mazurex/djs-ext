@@ -6,7 +6,7 @@ export type Callback<E extends keyof ClientEvents> = (
     ...args: ClientEvents[E]
 ) => Awaitable<void>
 
-export class EventListener<E extends keyof ClientEvents> {
+export class BotEventListener<E extends keyof ClientEvents> {
     private _name: E
     private _once: boolean = false
     private _callback: Callback<E> = () => {}

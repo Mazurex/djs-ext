@@ -1,7 +1,7 @@
 import { Awaitable, ClientEvents } from 'discord.js'
 import { ExtendedClient } from '../ExtendedClient'
 
-export type Callback<E extends keyof ClientEvents> = (
+export type BotEventListenerCallback<E extends keyof ClientEvents> = (
     client: ExtendedClient,
     ...args: ClientEvents[E]
 ) => Awaitable<void>
@@ -9,7 +9,7 @@ export type Callback<E extends keyof ClientEvents> = (
 export class BotEventListener<E extends keyof ClientEvents> {
     public readonly name: E
     private _once: boolean = false
-    private _callback: Callback<E> = () => {}
+    private _callback: BotEventListenerCallback<E> = () => {}
 
     public constructor(name: E) {
         this.name = name
@@ -20,7 +20,7 @@ export class BotEventListener<E extends keyof ClientEvents> {
         return this
     }
 
-    public execute(callback: Callback<E>) {
+    public execute(callback: BotEventListenerCallback<E>) {
         this._callback = callback
         return this
     }

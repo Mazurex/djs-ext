@@ -1,5 +1,5 @@
+import { GenericArg } from '../../classes/PrefixCommand'
 import { DjsExtDeserializationError } from '../../Error'
-import { GenericArg } from './Commands'
 
 export abstract class GreedyArg<T, Name extends string> extends GenericArg<
     T,

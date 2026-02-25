@@ -5,7 +5,8 @@ import {
     GatewayIntentBits,
 } from 'discord.js'
 import { DjsExtError, DjsExtErrorCodes } from './Error'
-import { PrefixCommand, SlashCommand } from './types/commands/Commands'
+import { PrefixCommand } from './classes/PrefixCommand'
+import { SlashCommand } from './classes/SlashCommand'
 
 export const DefaultClientIntents: GatewayIntentBits[] = [
     GatewayIntentBits.Guilds,
@@ -15,7 +16,7 @@ export const DefaultClientIntents: GatewayIntentBits[] = [
 
 export class ExtendedClient extends Client {
     public prefix: string
-    private _prefixCommands: Collection<string, PrefixCommand> =
+    private _prefixCommands: Collection<string, PrefixCommand<any>> =
         new Collection()
     private _slashCommands: Collection<string, SlashCommand> = new Collection()
 
@@ -31,7 +32,7 @@ export class ExtendedClient extends Client {
         return this._prefixCommands
     }
 
-    public addPrefixCommand(command: PrefixCommand) {
+    public addPrefixCommand(command: PrefixCommand<any>) {
         this._prefixCommands.set(command.name, command)
     }
 

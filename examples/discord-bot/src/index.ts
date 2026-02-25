@@ -1,7 +1,7 @@
 import {
     DefaultClientIntents,
     ExtendedClient,
-    registerEventFromPath,
+    registerEventsFromPath,
 } from '../../../dist/index.cjs'
 import 'dotenv/config'
 
@@ -16,7 +16,7 @@ const client = new ExtendedClient({
     intents: [...DefaultClientIntents, GatewayIntentBits.MessageContent],
 })
 
-registerEventFromPath(client, './events', __dirname)
+registerEventsFromPath(client, './events', __dirname)
 
 console.debug('Starting bot brrrrrrrrrrrrrrrrrrrrr')
 

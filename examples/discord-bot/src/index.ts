@@ -1,23 +1,23 @@
-import { Client, GatewayIntentBits, Message, TextChannel } from 'discord.js'
+import {
+    DefaultClientIntents,
+    ExtendedClient,
+    registerEventFromPath,
+} from '../../../dist/index.cjs'
 import 'dotenv/config'
 
-import { registerEventFromPath } from '../../../dist/index.js'
 import { fileURLToPath } from 'node:url'
 import { dirname } from 'node:path'
+import { GatewayIntentBits } from 'discord.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.MessageContent,
-    ],
+const client = new ExtendedClient({
+    intents: [...DefaultClientIntents, GatewayIntentBits.MessageContent],
 })
 
-console.debug('Starting bot brrrrrrrrrrrrrrrrrrrrr')
-
 registerEventFromPath(client, './events', __dirname)
+
+console.debug('Starting bot brrrrrrrrrrrrrrrrrrrrr')
 
 client.login(process.env.BOT_TOKEN)

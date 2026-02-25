@@ -7,13 +7,11 @@ import {
 import { DjsExtError, DjsExtErrorCodes } from './Error'
 import { PrefixCommand, SlashCommand } from './types/commands/Commands'
 
-const DefaultClientOptions: ClientOptions = {
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-        GatewayIntentBits.GuildMembers,
-    ],
-}
+export const DefaultClientIntents: GatewayIntentBits[] = [
+    GatewayIntentBits.Guilds,
+    GatewayIntentBits.GuildMessages,
+    GatewayIntentBits.GuildMembers,
+]
 
 export class ExtendedClient extends Client {
     public prefix: string
@@ -25,7 +23,7 @@ export class ExtendedClient extends Client {
         if (typeof prefix !== 'string')
             throw new Error('The prefix for should be a string!')
 
-        super(options || DefaultClientOptions)
+        super(options || { intents: DefaultClientIntents })
         this.prefix = prefix
     }
 

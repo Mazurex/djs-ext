@@ -17,7 +17,7 @@ export async function slashCommandHandler(
     }
 
     try {
-        await Promise.resolve(command.execute(client, interaction))
+        await Promise.resolve(command.callback(client, interaction))
     } catch (error) {
         throw new DjsExtError(DjsExtErrorCodes.SlashCommandError, [], error)
     }

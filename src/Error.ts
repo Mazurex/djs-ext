@@ -4,6 +4,7 @@ export enum DjsExtErrorCodes {
     SlashCommandError = 'Slash command error',
     MissingModuleDirectory = 'Missing module directory',
     MissingModuleDefinition = 'Missing module definition',
+    PrefixCommandArgOutOfBounds = 'Prefix command arg out of bounds',
 }
 
 /**

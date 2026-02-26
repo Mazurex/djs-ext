@@ -33,7 +33,7 @@ export class ExtendedClient extends Client {
     }
 
     public addPrefixCommand(command: PrefixCommand<any>) {
-        this._prefixCommands.set(command.name, command)
+        command.register(this)
     }
 
     public get slashCommands() {
@@ -41,7 +41,7 @@ export class ExtendedClient extends Client {
     }
 
     public addSlashCommand(command: SlashCommand) {
-        this._slashCommands.set(command.data.name, command)
+        command.register(this)
     }
 
     public async start(token?: string) {

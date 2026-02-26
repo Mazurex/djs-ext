@@ -1,8 +1,8 @@
 import {
     DefaultClientIntents,
     ExtendedClient,
-    registerEventsFromPath,
-} from '../../../dist/index.cjs'
+    registerGenericFromPath,
+} from '../../../dist/index.js'
 import 'dotenv/config'
 
 import { fileURLToPath } from 'node:url'
@@ -16,8 +16,13 @@ const client = new ExtendedClient({
     intents: [...DefaultClientIntents, GatewayIntentBits.MessageContent],
 })
 
-registerEventsFromPath(client, './events', __dirname)
+await registerGenericFromPath(client, './events', __dirname, 'event')
+await registerGenericFromPath(client, './prefix_commands', __dirname, 'prefix')
+await registerGenericFromPath(client, './slash_commands', __dirname, 'slash')
 
 console.debug('Starting bot brrrrrrrrrrrrrrrrrrrrr')
 
-client.login(process.env.BOT_TOKEN)
+await client.login(process.env.BOT_TOKEN)
+
+console.log(client.prefixCommands)
+console.log(client.slashCommands)

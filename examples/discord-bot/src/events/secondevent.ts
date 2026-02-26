@@ -1,4 +1,4 @@
-import { BotEventListener } from '../../../../dist/index.cjs'
+import { BotEventListener } from '../../../../dist/index.js'
 
 export default new BotEventListener('messageCreate').execute(
     async (client, message) => {

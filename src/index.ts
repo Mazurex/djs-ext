@@ -15,3 +15,5 @@ export * from './classes/SlashCommand'
 // Essential
 export * from './Error'
 export * from './ExtendedClient'
+
+export * from './Modules/file'

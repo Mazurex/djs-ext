@@ -5,6 +5,7 @@ export enum DjsExtErrorCodes {
     MissingModuleDirectory = 'Missing module directory',
     MissingModuleDefinition = 'Missing module definition',
     PrefixCommandArgOutOfBounds = 'Prefix command arg out of bounds',
+    ModuleFetchInvalidDir = 'Module fetch invalid dir',
 }
 
 /**

@@ -1,5 +1,5 @@
 import { PathLike } from 'node:fs'
-import { GenericModules, ModulePredicate } from '../types/Modules'
+import { GenericModuleTypes, ModulePredicate } from '../types/Modules'
 import fs from 'fs'
 import path from 'node:path'
 import { DjsExtError, DjsExtErrorCodes } from '../Error'
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url'
  * @param recursive
  * @returns
  */
-export async function fetchModuleInstances<Module extends GenericModules>(
+export async function fetchModuleInstances<Module extends GenericModuleTypes>(
     dir: PathLike,
     predicate: ModulePredicate<Module>,
     recursive: boolean = true

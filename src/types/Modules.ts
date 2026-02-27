@@ -4,7 +4,7 @@ import { SlashCommand } from '../classes/SlashCommand'
 
 export type Constructor<T> = new (...args: any[]) => T
 
-export type GenericModules =
+export type GenericModuleTypes =
     | BotEventListener<any>
     | PrefixCommand<any>
     | SlashCommand

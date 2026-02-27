@@ -6,6 +6,7 @@ export * from './handlers/slashCommand'
 // Types
 export * from './types/Client'
 export * from './types/commands/PrefixCommandArgs'
+export * from './types/Modules'
 
 // Classes
 export * from './classes/Event'

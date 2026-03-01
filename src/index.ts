@@ -17,4 +17,5 @@ export * from './classes/SlashCommand'
 export * from './Error'
 export * from './ExtendedClient'
 
-export * from './Modules/file'
+export * from './Modules/fetch'
+export * from './Modules/predicate'

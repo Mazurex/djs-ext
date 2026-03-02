@@ -7,6 +7,20 @@ import {
 import { DjsExtError, DjsExtErrorCodes } from './Error'
 import { PrefixCommand } from './classes/PrefixCommand'
 import { SlashCommand } from './classes/SlashCommand'
+import {
+    registerEventListener,
+    registerPrefixCommand,
+    registerSlashCommand,
+} from './handlers/registration'
+import { BotEventListener } from './classes/Event'
+import { fetchModuleInstances } from './Modules/fetch'
+import {
+    isEventListener,
+    isPrefixCommand,
+    isSlashCommand,
+} from './Modules/predicate'
+import path from 'path'
+import { PathLike } from 'fs'
 
 export const DefaultClientIntents: GatewayIntentBits[] = [
     GatewayIntentBits.Guilds,
@@ -15,7 +29,7 @@ export const DefaultClientIntents: GatewayIntentBits[] = [
 ]
 
 export class ExtendedClient extends Client {
-    public prefix: string
+    public readonly prefix: string
     private _prefixCommands: Collection<string, PrefixCommand<any>> =
         new Collection()
     private _slashCommands: Collection<string, SlashCommand> = new Collection()
@@ -32,21 +46,65 @@ export class ExtendedClient extends Client {
         return this._prefixCommands
     }
 
-    public addPrefixCommand(command: PrefixCommand<any>) {
-        command.register(this)
-    }
-
     public get slashCommands() {
         return this._slashCommands
     }
 
-    public addSlashCommand(command: SlashCommand) {
-        command.register(this)
+    public registerPrefixCommand(command: PrefixCommand<any>) {
+        registerPrefixCommand(this, command)
     }
 
-    public async start(token?: string) {
+    public registerSlashCommand(command: SlashCommand) {
+        registerSlashCommand(this, command)
+    }
+
+    public registerEventListener(event: BotEventListener<any>) {
+        registerEventListener(this, event)
+    }
+
+    public async reloadAllEvents(
+        dir: PathLike = path.join(__dirname, './events')
+    ) {
+        this.removeAllListeners()
+        const eventModules = await fetchModuleInstances(dir, isEventListener)
+        for (const event of eventModules) {
+            this.registerEventListener(event)
+        }
+    }
+
+    public async reloadAllPrefixCommands(
+        dir: PathLike = path.join(__dirname, './prefix_commands')
+    ) {
+        this.prefixCommands.clear()
+        const commandModules = await fetchModuleInstances(dir, isPrefixCommand)
+        for (const command of commandModules) {
+            this.registerPrefixCommand(command)
+        }
+    }
+
+    public async reloadAllSlashCommands(
+        dir: PathLike = path.join(__dirname, './slash_commands')
+    ) {
+        this.slashCommands.clear()
+        const commandModules = await fetchModuleInstances(dir, isSlashCommand)
+        for (const command of commandModules) {
+            this.registerSlashCommand(command)
+        }
+    }
+
+    public async start(
+        token?: string,
+        reloadEvents: boolean = true,
+        reloadPrefixCommands: boolean = true,
+        reloadSlashCommands: boolean = true
+    ) {
         if (!token || typeof token !== 'string')
             throw new DjsExtError(DjsExtErrorCodes.NoTokenProvided)
+
+        if (reloadEvents) this.reloadAllEvents()
+        if (reloadPrefixCommands) this.reloadAllPrefixCommands()
+        if (reloadSlashCommands) this.reloadAllSlashCommands()
+
         await this.login(token)
     }
 }

@@ -2,7 +2,6 @@ import { BotEventListener } from '../classes/Event'
 import { PrefixCommand } from '../classes/PrefixCommand'
 import { SlashCommand } from '../classes/SlashCommand'
 import { ExtendedClient } from '../ExtendedClient'
-import { AnyClientType } from '../types/Client'
 
 /**
  * Register an event listener onto a client
@@ -11,12 +10,12 @@ import { AnyClientType } from '../types/Client'
  * @param event The event to register
  */
 export function registerEventListener(
-    client: AnyClientType,
+    client: ExtendedClient,
     event: BotEventListener<any>
 ) {
     ;(event.getOnce ? client.once : client.on).bind(client)(
         event.name,
-        event.getExecute
+        (...args) => event.getExecute(client, ...args)
     )
 }
 

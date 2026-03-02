@@ -9,7 +9,7 @@ export type BotEventListenerCallback<E extends keyof ClientEvents> = (
 export class BotEventListener<E extends keyof ClientEvents> {
     public readonly name: E
     private _once: boolean = false
-    private _execute: Awaitable<BotEventListenerCallback<E>> = () => {}
+    private _execute: BotEventListenerCallback<E> = () => {}
 
     public constructor(name: E) {
         this.name = name
@@ -20,7 +20,7 @@ export class BotEventListener<E extends keyof ClientEvents> {
         return this
     }
 
-    public execute(callback: Awaitable<BotEventListenerCallback<E>>) {
+    public execute(callback: BotEventListenerCallback<E>) {
         this._execute = callback
         return this
     }

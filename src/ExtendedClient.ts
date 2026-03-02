@@ -3,6 +3,8 @@ import {
     ClientOptions,
     Collection,
     GatewayIntentBits,
+    Message,
+    MessageFlags,
 } from 'discord.js'
 import { DjsExtError, DjsExtErrorCodes } from './Error'
 import { PrefixCommand } from './classes/PrefixCommand'
@@ -21,25 +23,113 @@ import {
 } from './Modules/predicate'
 import path from 'path'
 import { PathLike } from 'fs'
+import { ExtendedClientOptions } from './types/Client'
+import { prefixCommandHandler } from './handlers/prefixCommand'
+import { slashCommandHandler } from './handlers/slashCommand'
 
-export const DefaultClientIntents: GatewayIntentBits[] = [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
-]
+export const defaultClientOptions: ExtendedClientOptions = {
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildMembers,
+    ],
+    prefix: '!',
+    autoLoad: {
+        events: true,
+        prefixCommands: true,
+        slashCommands: true,
+    },
+    bind: {
+        prefixCommands: true,
+        slashCommands: true,
+    },
+}
 
 export class ExtendedClient extends Client {
-    public readonly prefix: string
+    public readonly clientOptions: ExtendedClientOptions
     private _prefixCommands: Collection<string, PrefixCommand<any>> =
         new Collection()
     private _slashCommands: Collection<string, SlashCommand> = new Collection()
 
-    public constructor(options?: ClientOptions, prefix: string = '!') {
-        if (typeof prefix !== 'string')
-            throw new Error('The prefix for should be a string!')
+    public constructor(options?: ExtendedClientOptions) {
+        const _options = { ...defaultClientOptions, ...options }
+        super(_options)
+        this.clientOptions = _options
 
-        super(options || { intents: DefaultClientIntents })
-        this.prefix = prefix
+        const autoLoad = this.clientOptions.autoLoad
+        const bind = this.clientOptions.bind
+
+        if (autoLoad?.events) this.reloadAllEvents()
+        if (autoLoad?.prefixCommands) this.reloadAllPrefixCommands()
+        if (autoLoad?.slashCommands) this.reloadAllSlashCommands()
+
+        if (bind?.prefixCommands) {
+            this.registerEventListener(
+                new BotEventListener('messageCreate').execute(
+                    async (client, message) => {
+                        if (message.author.bot) return
+
+                        try {
+                            prefixCommandHandler(client, message)
+                        } catch (error) {
+                            if (!(error instanceof DjsExtError)) {
+                                throw error
+                            }
+
+                            if (
+                                error.code ===
+                                DjsExtErrorCodes.PrefixCommandArgOutOfBounds
+                            ) {
+                                await message.reply('Invalid command usage!') // Reply with help command builder in the future
+                                return
+                            }
+                        }
+                    }
+                )
+            )
+        }
+        if (bind?.slashCommands) {
+            this.registerEventListener(
+                new BotEventListener('interactionCreate').execute(
+                    async (client, interaction) => {
+                        if (!interaction.isChatInputCommand()) return
+
+                        const reply =
+                            interaction.replied || interaction.deferred
+                                ? interaction.followUp
+                                : interaction.reply
+
+                        try {
+                            slashCommandHandler(client, interaction)
+                        } catch (error) {
+                            if (!(error instanceof DjsExtError)) {
+                                throw error
+                            }
+
+                            switch (error.code) {
+                                case DjsExtErrorCodes.UnknownSlashCommand: {
+                                    await reply({
+                                        content:
+                                            'This slash command does not exist!',
+                                        flags: MessageFlags.Ephemeral,
+                                    })
+                                    break
+                                }
+                                case DjsExtErrorCodes.SlashCommandError: {
+                                    await reply({
+                                        content:
+                                            'There was an error when executing this command!',
+                                        flags: MessageFlags.Ephemeral,
+                                    })
+                                    console.error(String(error.parent))
+                                    break
+                                }
+                            }
+                        }
+                    }
+                )
+            )
+        }
     }
 
     public get prefixCommands() {
@@ -92,19 +182,9 @@ export class ExtendedClient extends Client {
         }
     }
 
-    public async start(
-        token?: string,
-        reloadEvents: boolean = true,
-        reloadPrefixCommands: boolean = true,
-        reloadSlashCommands: boolean = true
-    ) {
+    public async start(token?: string) {
         if (!token || typeof token !== 'string')
             throw new DjsExtError(DjsExtErrorCodes.NoTokenProvided)
-
-        if (reloadEvents) this.reloadAllEvents()
-        if (reloadPrefixCommands) this.reloadAllPrefixCommands()
-        if (reloadSlashCommands) this.reloadAllSlashCommands()
-
         await this.login(token)
     }
 }

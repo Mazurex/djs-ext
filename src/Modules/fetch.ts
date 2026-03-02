@@ -10,13 +10,23 @@ import { fileURLToPath } from 'node:url'
  */
 
 /**
+ * Fetch all module instances from a given base directory
  *
- * @param dir
- * @param predicate
- * @param recursive
- * @returns
+ * Example:
+ * ```
+ * const path = path.join(__dirname, "./events")
+ * const listeners = fetchModuleInstances<BotEventListener<any>>(path, isEventListener)
+ * ```
+ *
+ * @param dir The base directory of the modules
+ * @param predicate A function that takes the default export of a file and returns `true` to include the module in the result, or `false` to skip it.
+ *
+ * Signature: `(mod: unknown) => boolean`
+ * @param recursive If true, will also look through all sub-directories of the base directory
+ * @returns An array of modules, or an empty array if none are found
+ * @throws {DjsExtError} If the base directory is not a valid directory
  */
-export async function fetchModuleInstances<Module extends GenericModuleTypes>(
+export async function fetchModuleInstances<Module>(
     dir: PathLike,
     predicate: ModulePredicate<Module>,
     recursive: boolean = true

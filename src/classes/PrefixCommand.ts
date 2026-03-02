@@ -57,10 +57,6 @@ export class PrefixCommand<T extends readonly GenericArg<any, string>[]> {
         return this
     }
 
-    public register(client: ExtendedClient) {
-        client.prefixCommands.set(this.name, this)
-    }
-
     public get callback() {
         return this._callback
     }

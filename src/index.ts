@@ -1,7 +1,7 @@
 // Handlers
-export * from './handlers/generic'
 export * from './handlers/prefixCommand'
 export * from './handlers/slashCommand'
+export * from './handlers/registration'
 
 // Types
 export * from './types/Client'

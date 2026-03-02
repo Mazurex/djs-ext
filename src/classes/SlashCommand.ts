@@ -31,10 +31,6 @@ export class SlashCommand {
         return this
     }
 
-    public register(client: ExtendedClient) {
-        client.slashCommands.set(this.builder.name, this)
-    }
-
     public command(action: (builder: SlashCommandBuilder) => void) {
         action(this.builder)
         return this

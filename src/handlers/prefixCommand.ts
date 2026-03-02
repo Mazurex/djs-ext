@@ -2,7 +2,6 @@ import { Message } from 'discord.js'
 import { ExtendedClient } from '../ExtendedClient'
 import { GenericArg, PrefixCommand } from '../classes/PrefixCommand'
 import { DjsExtError, DjsExtErrorCodes } from '../Error'
-import { importModulesFromPath } from '../utils/modules'
 
 export function prefixCommandHandler(client: ExtendedClient, message: Message) {
     if (!message.content.startsWith(client.prefix) || client.user?.bot) return

@@ -9,4 +9,18 @@ export type GenericModuleTypes =
     | PrefixCommand<any>
     | SlashCommand
 
+/**
+ * A type for a predicate function to load a module
+ *
+ * Made for `fetchModuleInstances<Module>`
+ *
+ * Example:
+ * ```
+ * const isEventListener: ModulePredicate<BotEventListener<any>> = (
+ *     mod: unknown
+ * ) => {
+ *     return mod instanceof BotEventListener
+ * }
+ * ```
+ */
 export type ModulePredicate<Module> = (module: unknown) => module is Module

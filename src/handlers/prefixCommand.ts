@@ -4,11 +4,15 @@ import { GenericArg, PrefixCommand } from '../classes/PrefixCommand'
 import { DjsExtError, DjsExtErrorCodes } from '../Error'
 
 export function prefixCommandHandler(client: ExtendedClient, message: Message) {
-    if (!message.content.startsWith(client.prefix) || client.user?.bot) return
+    if (
+        !message.content.startsWith(client.clientOptions.prefix) ||
+        client.user?.bot
+    )
+        return
 
     const messageProperties = message.content
         .trim()
-        .slice(0, client.prefix.length)
+        .slice(0, client.clientOptions.prefix.length)
         .split(/\s+/)
 
     const messageCommand = {

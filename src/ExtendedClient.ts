@@ -50,16 +50,6 @@ export class ExtendedClient extends Client {
         const _options = { ...defaultClientOptions, ...options }
         super(_options)
         this.clientOptions = _options
-
-        const autoLoad = this.clientOptions.autoLoad
-        const bind = this.clientOptions.bind
-
-        if (autoLoad?.events) this.reloadAllEvents()
-        if (autoLoad?.prefixCommands) this.reloadAllPrefixCommands()
-        if (autoLoad?.slashCommands) this.reloadAllSlashCommands()
-
-        if (bind?.prefixCommands) this.bindPrefixHandler()
-        if (bind?.slashCommands) this.bindSlashHandler()
     }
 
     public get prefixCommands() {
@@ -202,6 +192,17 @@ export class ExtendedClient extends Client {
     public async start(token?: string) {
         if (!token || typeof token !== 'string')
             throw new DjsExtError(DjsExtErrorCodes.NoTokenProvided)
+
+        const autoLoad = this.clientOptions.autoLoad
+        const bind = this.clientOptions.bind
+
+        if (autoLoad?.events) this.reloadAllEvents()
+        if (autoLoad?.prefixCommands) this.reloadAllPrefixCommands()
+        if (autoLoad?.slashCommands) this.reloadAllSlashCommands()
+
+        if (bind?.prefixCommands) this.bindPrefixHandler()
+        if (bind?.slashCommands) this.bindSlashHandler()
+
         await this.login(token)
     }
 }

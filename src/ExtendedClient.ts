@@ -14,11 +14,17 @@ import {
     isPrefixCommand,
     isSlashCommand,
 } from './Modules/predicate'
-import path from 'path'
+import path, { dirname } from 'path'
 import { PathLike } from 'fs'
 import { ExtendedClientOptions } from './types/Client'
 import { prefixCommandHandler } from './handlers/prefixCommand'
 import { slashCommandHandler } from './handlers/slashCommand'
+import { fileURLToPath } from 'url'
+
+export const __myDirname =
+    typeof __dirname !== 'undefined'
+        ? __dirname
+        : dirname(fileURLToPath(import.meta.url))
 
 export const defaultClientOptions: ExtendedClientOptions = {
     intents: [
@@ -46,8 +52,19 @@ export class ExtendedClient extends Client {
 
     private bound = { prefix: false, slash: false }
 
-    public constructor(options?: ExtendedClientOptions) {
-        const _options = { ...defaultClientOptions, ...options }
+    public constructor(options?: Partial<ExtendedClientOptions>) {
+        const _options: ExtendedClientOptions = {
+            ...defaultClientOptions,
+            ...options,
+            bind: {
+                ...defaultClientOptions.bind,
+                ...options?.bind,
+            },
+            autoLoad: {
+                ...defaultClientOptions.autoLoad,
+                ...options?.autoLoad,
+            },
+        }
         super(_options)
         this.clientOptions = _options
     }
@@ -58,6 +75,10 @@ export class ExtendedClient extends Client {
 
     public get slashCommands() {
         return this._slashCommands
+    }
+
+    public get isBound() {
+        return this.bound
     }
 
     public registerPrefixCommand(command: PrefixCommand<any>) {
@@ -160,7 +181,7 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllEvents(
-        dir: PathLike = path.join(__dirname, './events')
+        dir: PathLike = path.join(__myDirname, './events')
     ) {
         this.removeAllListeners()
         const eventModules = await fetchModuleInstances(dir, isEventListener)
@@ -170,7 +191,7 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllPrefixCommands(
-        dir: PathLike = path.join(__dirname, './prefix_commands')
+        dir: PathLike = path.join(__myDirname, './prefix_commands')
     ) {
         this.prefixCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isPrefixCommand)
@@ -180,7 +201,7 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllSlashCommands(
-        dir: PathLike = path.join(__dirname, './slash_commands')
+        dir: PathLike = path.join(__myDirname, './slash_commands')
     ) {
         this.slashCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isSlashCommand)

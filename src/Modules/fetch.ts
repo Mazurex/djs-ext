@@ -31,6 +31,8 @@ export async function fetchModuleInstances<Module>(
     predicate: ModulePredicate<Module>,
     recursive: boolean = true
 ): Promise<Module[]> {
+    if (!fs.existsSync(dir)) return []
+
     const dirInfo = await fs.promises.stat(dir)
 
     if (!dirInfo.isDirectory())

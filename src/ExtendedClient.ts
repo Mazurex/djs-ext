@@ -17,9 +17,9 @@ import {
 import path, { dirname } from 'path'
 import { PathLike } from 'fs'
 import { ExtendedClientOptions } from './types/Client'
-import { prefixCommandHandler } from './handlers/prefixCommand'
-import { slashCommandHandler } from './handlers/slashCommand'
 import { fileURLToPath } from 'url'
+import { bindSlashCommandEventListener } from './handlers/binders/slashCommand'
+import { bindPrefixCommandEventListener } from './handlers/binders/prefixCommand'
 
 export const __myDirname =
     typeof __dirname !== 'undefined'
@@ -50,8 +50,6 @@ export class ExtendedClient extends Client {
         new Collection()
     private _slashCommands: Collection<string, SlashCommand> = new Collection()
 
-    private bound = { prefix: false, slash: false }
-
     public constructor(options?: Partial<ExtendedClientOptions>) {
         const _options: ExtendedClientOptions = {
             ...defaultClientOptions,
@@ -77,10 +75,6 @@ export class ExtendedClient extends Client {
         return this._slashCommands
     }
 
-    public get isBound() {
-        return this.bound
-    }
-
     public registerPrefixCommand(command: PrefixCommand<any>) {
         registerPrefixCommand(this, command)
     }
@@ -91,93 +85,6 @@ export class ExtendedClient extends Client {
 
     public registerEventListener(event: BotEventListener<any>) {
         registerEventListener(this, event)
-    }
-
-    public bindPrefixHandler() {
-        if (this.bound.prefix) {
-            console.warn(
-                'An attempt to "bind the prefix command handler whilst already bound" has been made, skipping duplicate binding'
-            )
-            return
-        }
-
-        this.bound.prefix = true
-
-        this.registerEventListener(
-            new BotEventListener('messageCreate').execute(
-                async (client, message) => {
-                    if (message.author.bot) return
-
-                    try {
-                        prefixCommandHandler(client, message)
-                    } catch (error) {
-                        if (!(error instanceof DjsExtError)) {
-                            throw error
-                        }
-
-                        if (
-                            error.code ===
-                            DjsExtErrorCodes.PrefixCommandArgOutOfBounds
-                        ) {
-                            await message.reply('Invalid command usage!') // Reply with help command builder in the future
-                            return
-                        }
-                    }
-                }
-            )
-        )
-    }
-
-    public bindSlashHandler() {
-        if (this.bound.slash) {
-            console.warn(
-                'An attempt to "bind the slash command handler whilst already bound" has been made, skipping duplicate binding'
-            )
-            return
-        }
-
-        this.bound.slash = true
-
-        this.registerEventListener(
-            new BotEventListener('interactionCreate').execute(
-                async (client, interaction) => {
-                    if (!interaction.isChatInputCommand()) return
-
-                    const reply =
-                        interaction.replied || interaction.deferred
-                            ? interaction.followUp
-                            : interaction.reply
-
-                    try {
-                        slashCommandHandler(client, interaction)
-                    } catch (error) {
-                        if (!(error instanceof DjsExtError)) {
-                            throw error
-                        }
-
-                        switch (error.code) {
-                            case DjsExtErrorCodes.UnknownSlashCommand: {
-                                await reply({
-                                    content:
-                                        'This slash command does not exist!',
-                                    flags: MessageFlags.Ephemeral,
-                                })
-                                break
-                            }
-                            case DjsExtErrorCodes.SlashCommandError: {
-                                await reply({
-                                    content:
-                                        'There was an error when executing this command!',
-                                    flags: MessageFlags.Ephemeral,
-                                })
-                                console.error(String(error.parent))
-                                break
-                            }
-                        }
-                    }
-                }
-            )
-        )
     }
 
     public async reloadAllEvents(
@@ -221,8 +128,8 @@ export class ExtendedClient extends Client {
         if (autoLoad?.prefixCommands) this.reloadAllPrefixCommands()
         if (autoLoad?.slashCommands) this.reloadAllSlashCommands()
 
-        if (bind?.prefixCommands) this.bindPrefixHandler()
-        if (bind?.slashCommands) this.bindSlashHandler()
+        if (bind?.prefixCommands) bindPrefixCommandEventListener(this)
+        if (bind?.slashCommands) bindSlashCommandEventListener(this)
 
         await this.login(token)
     }

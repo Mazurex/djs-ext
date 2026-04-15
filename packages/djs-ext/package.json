@@ -1,0 +1,49 @@
+{
+    "name": "djs-ext",
+    "version": "0.1.0",
+    "description": "Unofficial extension toolkit for discord.js",
+    "main": "./dist/index.cjs",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/types/index.d.ts",
+            "import": "./dist/index.js",
+            "require": "./dist/index.cjs"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "tsup",
+        "test": "vitest",
+        "test:watch": "vitest --watch",
+        "prepublishOnly": "pnpm build"
+    },
+    "keywords": [
+        "discord",
+        "extension",
+        "toolkit",
+        "node"
+    ],
+    "author": "Maz",
+    "license": "ISC",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Mazurex/djs-ext.git"
+    },
+    "bugs": {
+        "url": "https://github.com/Mazurex/djs-ext.git/issues"
+    },
+    "peerDependencies": {
+        "discord.js": "^14.25.1"
+    },
+    "devDependencies": {
+        "dts-bundle-generator": "^9.5.1",
+        "tsup": "^8.5.1",
+        "vitest": "^4.0.18"
+    },
+    "packageManager": "pnpm@10.0.0"
+}

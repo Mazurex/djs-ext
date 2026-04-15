@@ -2,9 +2,9 @@
  *  Run this script to delete all dist/ directories and rebuild them via `pnpm build`
  */
 
-const { execSync } = require('node:child_process')
-const { rmSync, readdirSync } = require('node:fs')
-const { resolve, join } = require('node:path')
+import { execSync } from 'node:child_process'
+import { rmSync, readdirSync } from 'node:fs'
+import { resolve, join } from 'node:path'
 
 readdirSync('packages/').forEach((pkg) => {
     rmSync(resolve(join('packages', pkg, 'dist')), {

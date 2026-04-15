@@ -1,7 +1,8 @@
 {
     "private": "true",
     "scripts": {
-        "build": "pnpm -r build"
+        "build": "pnpm -r build",
+        "run-example-bot": "node scripts/rebuild.js && pnpm --filter discord-bot start"
     },
     "packageManager": "pnpm@10.24.0",
     "devDependencies": {

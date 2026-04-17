@@ -23,15 +23,15 @@ import { fileURLToPath } from 'node:url'
  *
  * Signature: `(mod: unknown) => boolean`
  * @param recursive If true, will also look through all sub-directories of the base directory
- * @returns An array of modules, or an empty array if none are found
+ * @returns If the `dir` exists, an array of modules or an empty array if none are found, if the `dir` is invalid, **null** is returned
  * @throws {DjsExtError} If the base directory is not a valid directory
  */
 export async function fetchModuleInstances<Module>(
     dir: PathLike,
     predicate: ModulePredicate<Module>,
     recursive: boolean = true
-): Promise<Module[]> {
-    if (!fs.existsSync(dir)) return []
+): Promise<Module[] | null> {
+    if (!fs.existsSync(dir)) return null
 
     const dirInfo = await fs.promises.stat(dir)
 

@@ -92,6 +92,13 @@ export class ExtendedClient extends Client {
     ) {
         this.removeAllListeners()
         const eventModules = await fetchModuleInstances(dir, isEventListener)
+
+        if (eventModules === null) {
+            return console.warn(
+                'Missing "events/" directory, no events will be loaded!'
+            )
+        }
+
         for (const event of eventModules) {
             this.registerEventListener(event)
         }
@@ -102,6 +109,13 @@ export class ExtendedClient extends Client {
     ) {
         this.prefixCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isPrefixCommand)
+
+        if (commandModules === null) {
+            return console.warn(
+                'Missing "prefix_commands/" directory, no prefix commands will be loaded!'
+            )
+        }
+
         for (const command of commandModules) {
             this.registerPrefixCommand(command)
         }
@@ -112,6 +126,13 @@ export class ExtendedClient extends Client {
     ) {
         this.slashCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isSlashCommand)
+
+        if (commandModules === null) {
+            return console.warn(
+                'Missing "slash_commands/" directory, no slash_commands will be loaded!'
+            )
+        }
+
         for (const command of commandModules) {
             this.registerSlashCommand(command)
         }

@@ -41,8 +41,7 @@
         "discord.js": "^14.25.1"
     },
     "devDependencies": {
-        "tsup": "^8.5.1",
-        "vitest": "^4.0.18"
+        "tsup": "^8.5.1"
     },
     "packageManager": "pnpm@10.0.0"
 }

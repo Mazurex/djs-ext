@@ -1,8 +1,8 @@
 import { MessageFlags } from 'discord.js'
-import { BotEventListener } from '../../classes/Event'
-import { DjsExtError, DjsExtErrorCodes } from '../../Error'
-import { ExtendedClient } from '../../ExtendedClient'
-import { slashCommandHandler } from '../slashCommand'
+import { BotEventListener } from '../classes/Event'
+import { DjsExtError, DjsExtErrorCodes } from '../Error'
+import { ExtendedClient } from '../ExtendedClient'
+import { slashCommandHandler } from '../handlers/slashCommand'
 
 export function bindSlashCommandEventListener(client: ExtendedClient) {
     client.registerEventListener(

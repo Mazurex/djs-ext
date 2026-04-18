@@ -1,7 +1,7 @@
-import { BotEventListener } from '../../classes/Event'
-import { DjsExtError, DjsExtErrorCodes } from '../../Error'
-import { ExtendedClient } from '../../ExtendedClient'
-import { prefixCommandHandler } from '../prefixCommand'
+import { BotEventListener } from '../classes/Event'
+import { DjsExtError, DjsExtErrorCodes } from '../Error'
+import { ExtendedClient } from '../ExtendedClient'
+import { prefixCommandHandler } from '../handlers/prefixCommand'
 
 export function bindPrefixCommandEventListener(client: ExtendedClient) {
     client.registerEventListener(

@@ -18,8 +18,8 @@ import path, { dirname } from 'path'
 import { PathLike } from 'fs'
 import { ExtendedClientOptions } from './types/Client'
 import { fileURLToPath } from 'url'
-import { bindSlashCommandEventListener } from './handlers/binders/slashCommand'
-import { bindPrefixCommandEventListener } from './handlers/binders/prefixCommand'
+import { bindSlashCommandEventListener } from './binders/slashCommand'
+import { bindPrefixCommandEventListener } from './binders/prefixCommand'
 
 export const __myDirname =
     typeof __dirname !== 'undefined'
@@ -95,7 +95,7 @@ export class ExtendedClient extends Client {
 
         if (eventModules === null) {
             return console.warn(
-                'Missing "events/" directory, no events will be loaded!'
+                `Missing events directory, no events will be loaded!\n(${dir})\n`
             )
         }
 
@@ -112,7 +112,7 @@ export class ExtendedClient extends Client {
 
         if (commandModules === null) {
             return console.warn(
-                'Missing "prefix_commands/" directory, no prefix commands will be loaded!'
+                `Missing prefix commands directory, no prefix commands will be loaded!\n(${dir})\n`
             )
         }
 
@@ -129,7 +129,7 @@ export class ExtendedClient extends Client {
 
         if (commandModules === null) {
             return console.warn(
-                'Missing "slash_commands/" directory, no slash_commands will be loaded!'
+                `Missing slash_commands directory, no slash_commands will be loaded!\n(${dir})\n`
             )
         }
 

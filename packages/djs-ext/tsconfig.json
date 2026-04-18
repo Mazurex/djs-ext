@@ -10,6 +10,6 @@
             "@/*": ["src/*"]
         }
     },
-    "include": ["src", "src"],
+    "include": ["src"],
     "exclude": ["dist", "node_modules"]
 }

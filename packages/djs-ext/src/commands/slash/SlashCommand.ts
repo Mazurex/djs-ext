@@ -5,7 +5,7 @@ import {
     Snowflake,
 } from 'discord.js'
 
-import { arrayAppend } from '@/utils/modules'
+import { arrayAppend } from '../shared/helpers'
 
 import { ExtendedClient } from '@/client/ExtendedClient'
 

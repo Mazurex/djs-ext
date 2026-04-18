@@ -9,11 +9,6 @@ import { DjsExtError, DjsExtErrorCodes } from '@/core/Error'
 
 import { Constructor, ModulePredicate } from '@/types/modules'
 
-export function arrayAppend<T>(array: T[], value: T) {
-    if (Array.isArray(value)) array.concat(value)
-    else array.push(value)
-}
-
 export async function importModulesFromPath<T>(
     relativePath: string,
     absolutePath: string = process.cwd(),

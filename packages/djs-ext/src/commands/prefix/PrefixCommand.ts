@@ -2,7 +2,7 @@ import { Awaitable, Snowflake } from 'discord.js'
 
 import { GenericArg } from './args'
 
-import { arrayAppend } from '@/utils/modules'
+import { arrayAppend } from '../shared/helpers'
 
 import { ExtendedClient } from '@/client/ExtendedClient'
 

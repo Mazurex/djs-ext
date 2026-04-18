@@ -1,5 +1,6 @@
 import { Awaitable, ClientEvents } from 'discord.js'
-import { ExtendedClient } from '../ExtendedClient'
+
+import { ExtendedClient } from '@/client/ExtendedClient'
 
 export type BotEventListenerCallback<E extends keyof ClientEvents> = (
     client: ExtendedClient,

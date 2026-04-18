@@ -1,10 +1,8 @@
-import { Collection, EmbedAuthorOptions, EmbedBuilder } from 'discord.js'
-import { PrefixCommand } from './PrefixCommand'
+import { Collection, EmbedBuilder } from 'discord.js'
 
-export interface HelpCommandOptions {
-    title: string
-    author: EmbedAuthorOptions
-}
+import { PrefixCommand } from '@/commands/prefix/PrefixCommand'
+
+import { HelpCommandOptions } from '@/types/options'
 
 export const defaultHelpCommandOptions: HelpCommandOptions = {
     title: 'Help',

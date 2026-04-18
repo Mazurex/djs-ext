@@ -1,6 +1,6 @@
-import { BotEventListener } from '../classes/Event'
-import { PrefixCommand } from '../classes/PrefixCommand'
-import { SlashCommand } from '../classes/SlashCommand'
+import { PrefixCommand } from '@/commands/prefix/PrefixCommand'
+import { SlashCommand } from '@/commands/slash/SlashCommand'
+import { BotEventListener } from '@/events/BotEventListener'
 
 export type Constructor<T> = new (...args: any[]) => T
 

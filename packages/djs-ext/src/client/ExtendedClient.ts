@@ -1,25 +1,33 @@
-import { Client, Collection, GatewayIntentBits, MessageFlags } from 'discord.js'
-import { DjsExtError, DjsExtErrorCodes } from './Error'
-import { PrefixCommand } from './classes/PrefixCommand'
-import { SlashCommand } from './classes/SlashCommand'
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import type { PathLike } from 'fs'
+
+import { Client, Collection, GatewayIntentBits } from 'discord.js'
+
+import { DjsExtError, DjsExtErrorCodes } from '@/core/Error'
+
+import { ExtendedClientOptions } from '@/types/options'
+
+import { PrefixCommand } from '@/commands/prefix/PrefixCommand'
+import { SlashCommand } from '@/commands/slash/SlashCommand'
 import {
-    registerEventListener,
+    bindPrefixCommandEventListener,
     registerPrefixCommand,
+} from '@/commands/prefix/system'
+import {
+    bindSlashCommandEventListener,
     registerSlashCommand,
-} from './handlers/registration'
-import { BotEventListener } from './classes/Event'
-import { fetchModuleInstances } from './Modules/fetch'
+} from '@/commands/slash/system'
+
+import { registerEventListener } from '@/events/register'
+import { BotEventListener } from '@/events/BotEventListener'
+
+import { fetchModuleInstances } from '@/utils/modules'
 import {
     isEventListener,
     isPrefixCommand,
     isSlashCommand,
-} from './Modules/predicate'
-import path, { dirname } from 'path'
-import { PathLike } from 'fs'
-import { ExtendedClientOptions } from './types/Client'
-import { fileURLToPath } from 'url'
-import { bindSlashCommandEventListener } from './binders/slashCommand'
-import { bindPrefixCommandEventListener } from './binders/prefixCommand'
+} from '@/utils/modulePredicates'
 
 export const __myDirname =
     typeof __dirname !== 'undefined'
@@ -88,7 +96,7 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllEvents(
-        dir: PathLike = path.join(__myDirname, './events')
+        dir: PathLike = join(__myDirname, './events')
     ) {
         this.removeAllListeners()
         const eventModules = await fetchModuleInstances(dir, isEventListener)
@@ -105,7 +113,7 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllPrefixCommands(
-        dir: PathLike = path.join(__myDirname, './prefix_commands')
+        dir: PathLike = join(__myDirname, './prefix_commands')
     ) {
         this.prefixCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isPrefixCommand)
@@ -122,7 +130,7 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllSlashCommands(
-        dir: PathLike = path.join(__myDirname, './slash_commands')
+        dir: PathLike = join(__myDirname, './slash_commands')
     ) {
         this.slashCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isSlashCommand)

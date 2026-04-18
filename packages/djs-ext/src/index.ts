@@ -1,40 +1,37 @@
-import { ExtendedClient } from './ExtendedClient'
-import { BotEventListener } from './classes/Event'
-import { PrefixCommand } from './classes/PrefixCommand'
-import { SlashCommand } from './classes/SlashCommand'
+/**
+ * Entry point for the library's public API.
+ * All externally exposed modules are exported from here,
+ * and internal/private modules are intentionally excluded.
+ *
+ * Export order reflects dependency depth within the library:
+ * lower-level modules are exported first, followed by higher-level modules
+ * that depend on them.
+ */
 
-// Handlers
-import * as prefixCommand from './handlers/prefixCommand'
-import * as slashCommand from './handlers/slashCommand'
-import * as registration from './handlers/registration'
+export { DjsExtError, DjsExtErrorCodes } from '@/core/Error'
 
-// Modules
-import * as fetchModule from './Modules/fetch'
-import * as predicate from './Modules/predicate'
+export * from '@/utils/modules'
+export * from '@/utils/modulePredicates'
 
-// Types (re-export only)
-export * from './types/Client'
-export * from './types/commands/PrefixCommandArgs'
-export * from './types/Modules'
+export * from '@/events/BotEventListener'
+export * from '@/events/register'
 
-export { ExtendedClient, BotEventListener, PrefixCommand, SlashCommand }
+export * from '@/commands/prefix/PrefixCommand'
+export * from '@/commands/prefix/args'
+export * from '@/commands/prefix/system'
 
-export const handlers = {
-    prefixCommand,
-    slashCommand,
-    registration,
-}
+export * from '@/commands/slash/SlashCommand'
+export * from '@/commands/slash/system'
 
-export const modules = {
-    fetch: fetchModule,
-    predicate,
-}
+// Uncomment help command export when its finished, or at least somewhat ready
+/*
+export {
+    HelpCommand,
+    defaultHelpCommandOptions,
+} from '@/features/help/HelpCommand'
+*/
 
-export default {
-    ExtendedClient,
-    Event,
-    PrefixCommand,
-    SlashCommand,
-    handlers,
-    modules,
-}
+export { ExtendedClient, defaultClientOptions } from '@/client/ExtendedClient'
+
+export * from '@/types/options'
+export * from '@/types/modules'

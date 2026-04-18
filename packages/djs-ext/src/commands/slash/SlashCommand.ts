@@ -4,8 +4,10 @@ import {
     SlashCommandBuilder,
     Snowflake,
 } from 'discord.js'
-import { ExtendedClient } from '../ExtendedClient'
-import { arrayAppend } from '../utils/modules'
+
+import { arrayAppend } from '@/utils/modules'
+
+import { ExtendedClient } from '@/client/ExtendedClient'
 
 export type SlashCommandCallback = (
     client: ExtendedClient,

@@ -4,8 +4,12 @@
         "rootDir": "src",
         "outDir": "dist",
         "declaration": true,
-        "emitDeclarationOnly": false
+        "emitDeclarationOnly": false,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
     },
-    "include": ["src"],
+    "include": ["src", "src"],
     "exclude": ["dist", "node_modules"]
 }

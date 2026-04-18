@@ -1,8 +1,40 @@
-import { MessageFlags } from 'discord.js'
-import { BotEventListener } from '../classes/Event'
-import { DjsExtError, DjsExtErrorCodes } from '../Error'
-import { ExtendedClient } from '../ExtendedClient'
-import { slashCommandHandler } from '../handlers/slashCommand'
+import { Interaction, MessageFlags } from 'discord.js'
+
+import { SlashCommand } from './SlashCommand'
+
+import { DjsExtError, DjsExtErrorCodes } from '@/core/Error'
+
+import { BotEventListener } from '@/events/BotEventListener'
+
+import { ExtendedClient } from '@/client/ExtendedClient'
+
+export function registerSlashCommand(
+    client: ExtendedClient,
+    command: SlashCommand
+) {
+    client.slashCommands.set(command.data.name, command)
+}
+
+export async function slashCommandHandler(
+    client: ExtendedClient,
+    interaction: Interaction
+) {
+    if (!interaction.isChatInputCommand()) return
+
+    const command = client.slashCommands.get(interaction.commandName)
+
+    if (!command) {
+        throw new DjsExtError(DjsExtErrorCodes.UnknownSlashCommand, [
+            interaction.commandName,
+        ])
+    }
+
+    try {
+        await Promise.resolve(command.callback(client, interaction))
+    } catch (error) {
+        throw new DjsExtError(DjsExtErrorCodes.SlashCommandError, [], error)
+    }
+}
 
 export function bindSlashCommandEventListener(client: ExtendedClient) {
     client.registerEventListener(

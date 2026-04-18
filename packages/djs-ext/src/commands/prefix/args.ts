@@ -1,5 +1,32 @@
-import { GenericArg } from '../../classes/PrefixCommand'
-import { DjsExtDeserializationError } from '../../Error'
+import { DjsExtDeserializationError } from '@/core/Error'
+
+export abstract class GenericArg<T, Name extends string> {
+    public readonly name: Name
+    private _required: boolean = false
+
+    public constructor(name: Name) {
+        this.name = name
+    }
+
+    public get getRequired() {
+        return this._required
+    }
+
+    public required(required: boolean = true) {
+        this._required = required
+        return this
+    }
+
+    /**
+     * @throws {DjsExtDeserializationError} If the input is invalid
+     * @param input
+     */
+    abstract deserialize(input: string): T
+
+    public isGreedy(): boolean {
+        return false
+    }
+}
 
 export abstract class GreedyArg<T, Name extends string> extends GenericArg<
     T,

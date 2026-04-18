@@ -1,7 +1,8 @@
-import { BotEventListener } from '../classes/Event'
-import { PrefixCommand } from '../classes/PrefixCommand'
-import { SlashCommand } from '../classes/SlashCommand'
-import { ModulePredicate } from '../types/Modules'
+import { PrefixCommand } from '@/commands/prefix/PrefixCommand'
+import { SlashCommand } from '@/commands/slash/SlashCommand'
+import { BotEventListener } from '@/events/BotEventListener'
+
+import { ModulePredicate } from '@/types/modules'
 
 /**
  * Builtin predicate function for event listeners.

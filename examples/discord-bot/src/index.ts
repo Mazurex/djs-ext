@@ -1,6 +1,6 @@
-import ext from 'djs-ext'
+import { ExtendedClient } from 'djs-ext'
 import 'dotenv/config'
 
-const client = new ext.ExtendedClient()
+const client = new ExtendedClient()
 
 await client.start(process.env.BOT_TOKEN)

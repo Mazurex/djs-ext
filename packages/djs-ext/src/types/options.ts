@@ -1,4 +1,4 @@
-import { ClientOptions } from 'discord.js'
+import { ClientOptions, EmbedAuthorOptions } from 'discord.js'
 
 export interface ExtendedClientOptions extends ClientOptions {
     prefix: string
@@ -11,4 +11,9 @@ export interface ExtendedClientOptions extends ClientOptions {
         prefixCommands?: boolean
         slashCommands?: boolean
     }
+}
+
+export interface HelpCommandOptions {
+    title: string
+    author: EmbedAuthorOptions
 }

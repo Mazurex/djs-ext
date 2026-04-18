@@ -1,7 +1,4 @@
-import { Client, ClientOptions } from 'discord.js'
-import { ExtendedClient } from '../ExtendedClient'
-
-export type AnyClientType = ExtendedClient | Client
+import { ClientOptions } from 'discord.js'
 
 export interface ExtendedClientOptions extends ClientOptions {
     prefix: string

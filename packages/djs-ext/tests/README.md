@@ -1,6 +1,6 @@
 # Testing
 
-Testing should occur before publish, all tests can be executed with `npm run test` or `npm run test:watch`.
+Testing should occur before publish, all tests can be executed with `pnpm run test`.
 
 ## Testing Lib
 

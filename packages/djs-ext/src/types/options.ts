@@ -1,15 +1,22 @@
 import { ClientOptions, EmbedAuthorOptions } from 'discord.js'
 
 export interface ExtendedClientOptions extends ClientOptions {
-    prefix: string
-    autoLoad?: {
-        events?: boolean
-        prefixCommands?: boolean
-        slashCommands?: boolean
+    commands?: {
+        slash?: {
+            bind?: boolean
+            load?: boolean
+            parentDirName?: string
+        }
+        prefix?: {
+            bind?: boolean
+            load?: boolean
+            parentDirName?: string
+            prefix?: string
+        }
     }
-    bind?: {
-        prefixCommands?: boolean
-        slashCommands?: boolean
+    events?: {
+        load?: boolean
+        parentDirName?: string
     }
 }
 

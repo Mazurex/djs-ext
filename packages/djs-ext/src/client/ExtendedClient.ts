@@ -28,6 +28,7 @@ import {
     isPrefixCommand,
     isSlashCommand,
 } from '@/utils/modulePredicates'
+import { deepMerge } from './utils'
 
 export const __myDirname =
     typeof __dirname !== 'undefined'
@@ -40,15 +41,22 @@ export const defaultClientOptions: ExtendedClientOptions = {
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.GuildMembers,
     ],
-    prefix: '!',
-    autoLoad: {
-        events: true,
-        prefixCommands: true,
-        slashCommands: true,
+    commands: {
+        slash: {
+            bind: true,
+            load: true,
+            parentDirName: 'slash_commands',
+        },
+        prefix: {
+            bind: true,
+            load: true,
+            parentDirName: 'prefix_commands',
+            prefix: '!',
+        },
     },
-    bind: {
-        prefixCommands: true,
-        slashCommands: true,
+    events: {
+        load: true,
+        parentDirName: 'events',
     },
 }
 
@@ -59,18 +67,7 @@ export class ExtendedClient extends Client {
     private _slashCommands: Collection<string, SlashCommand> = new Collection()
 
     public constructor(options?: Partial<ExtendedClientOptions>) {
-        const _options: ExtendedClientOptions = {
-            ...defaultClientOptions,
-            ...options,
-            bind: {
-                ...defaultClientOptions.bind,
-                ...options?.bind,
-            },
-            autoLoad: {
-                ...defaultClientOptions.autoLoad,
-                ...options?.autoLoad,
-            },
-        }
+        const _options = deepMerge(defaultClientOptions, options ?? {})
         super(_options)
         this.clientOptions = _options
     }
@@ -96,7 +93,10 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllEvents(
-        dir: PathLike = join(__myDirname, './events')
+        dir: PathLike = join(
+            __myDirname,
+            this.clientOptions.events?.parentDirName ?? 'events'
+        )
     ) {
         this.removeAllListeners()
         const eventModules = await fetchModuleInstances(dir, isEventListener)
@@ -113,7 +113,11 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllPrefixCommands(
-        dir: PathLike = join(__myDirname, './prefix_commands')
+        dir: PathLike = join(
+            __myDirname,
+            this.clientOptions.commands?.prefix?.parentDirName ??
+                'prefix_commands'
+        )
     ) {
         this.prefixCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isPrefixCommand)
@@ -130,14 +134,18 @@ export class ExtendedClient extends Client {
     }
 
     public async reloadAllSlashCommands(
-        dir: PathLike = join(__myDirname, './slash_commands')
+        dir: PathLike = join(
+            __myDirname,
+            this.clientOptions.commands?.slash?.parentDirName ??
+                'slash_commands'
+        )
     ) {
         this.slashCommands.clear()
         const commandModules = await fetchModuleInstances(dir, isSlashCommand)
 
         if (commandModules === null) {
             return console.warn(
-                `Missing slash_commands directory, no slash_commands will be loaded!\n(${dir})\n`
+                `Missing slash commands directory, no slash_commands will be loaded!\n(${dir})\n`
             )
         }
 
@@ -150,15 +158,15 @@ export class ExtendedClient extends Client {
         if (!token || typeof token !== 'string')
             throw new DjsExtError(DjsExtErrorCodes.NoTokenProvided)
 
-        const autoLoad = this.clientOptions.autoLoad
-        const bind = this.clientOptions.bind
+        const options = this.clientOptions
+        const commandOptions = options.commands
 
-        if (autoLoad?.events) this.reloadAllEvents()
-        if (autoLoad?.prefixCommands) this.reloadAllPrefixCommands()
-        if (autoLoad?.slashCommands) this.reloadAllSlashCommands()
+        if (options.events?.load) this.reloadAllEvents()
+        if (commandOptions?.prefix?.load) this.reloadAllPrefixCommands()
+        if (commandOptions?.slash?.load) this.reloadAllSlashCommands()
 
-        if (bind?.prefixCommands) bindPrefixCommandEventListener(this)
-        if (bind?.slashCommands) bindSlashCommandEventListener(this)
+        if (commandOptions?.prefix?.bind) bindPrefixCommandEventListener(this)
+        if (commandOptions?.slash?.bind) bindSlashCommandEventListener(this)
 
         await this.login(token)
     }

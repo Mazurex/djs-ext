@@ -154,9 +154,9 @@ export class ExtendedClient extends Client {
         }
     }
 
-    public async start(token?: string) {
+    public async start(token: string | null = this.token) {
         if (!token || typeof token !== 'string')
-            throw new DjsExtError(DjsExtErrorCodes.NoTokenProvided)
+            throw new DjsExtError(DjsExtErrorCodes.InvalidTokenProvided)
 
         const options = this.clientOptions
         const commandOptions = options.commands

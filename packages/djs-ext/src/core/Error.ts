@@ -1,5 +1,5 @@
 export enum DjsExtErrorCodes {
-    NoTokenProvided = 'No Token Provided',
+    InvalidTokenProvided = 'Invalid Token Provided',
     UnknownSlashCommand = 'Unknown slash command',
     SlashCommandError = 'Slash command error',
     MissingModuleDirectory = 'Missing module directory',
@@ -50,4 +50,3 @@ export class DjsExtDeserializationError extends Error {
         this.actual = actual
     }
 }
-

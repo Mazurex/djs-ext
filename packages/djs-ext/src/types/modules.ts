@@ -2,8 +2,14 @@ import { PrefixCommand } from '@/commands/prefix/PrefixCommand'
 import { SlashCommand } from '@/commands/slash/SlashCommand'
 import { BotEventListener } from '@/events/BotEventListener'
 
+/**
+ * Constructor definition
+ */
 export type Constructor<T> = new (...args: any[]) => T
 
+/**
+ * A type for all modules provided by this library
+ */
 export type GenericModuleTypes =
     | BotEventListener<any>
     | PrefixCommand<any>
